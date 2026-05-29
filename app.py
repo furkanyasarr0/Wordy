@@ -223,9 +223,8 @@ class KelimeUygulamasi:
         y = (ekran_y - yukseklik) // 2
         pencere.geometry(f"{genislik}x{yukseklik}+{x}+{y}")
         
-        # 🛡️ YENİLİK: Eğer alt pencere açılıyorsa ve ana ekran sabitliyse, alt pencere de üstte kalmalı.
         if pencere != self.pencere:
-            pencere.transient(self.pencere) # Ana pencereye ait olduğunu belirt
+            pencere.transient(self.pencere) 
             if self.her_zaman_ustte:
                 pencere.attributes('-topmost', True)
 
@@ -285,10 +284,10 @@ class KelimeUygulamasi:
         self.workspace_combo.bind("<<ComboboxSelected>>", self.workspace_degisti)
         
         self.modern_btn(ws_cercevesi, "+ Yeni Alan", "#3B82F6", "white", self.yeni_workspace_penceresi).pack(side=tk.LEFT, padx=5)
-        self.modern_btn(ws_cercevesi, "🗑️ Alanı Sil", "#EF4444", "white", self.workspace_sil).pack(side=tk.LEFT, padx=5)
+        self.modern_btn(ws_cercevesi, "🗑️Alanı Sil", "#EF4444", "white", self.workspace_sil).pack(side=tk.LEFT, padx=5)
 
         # ⚙️ ℹ️ Hakkında & Ayarlar Butonu
-        self.modern_btn(ws_cercevesi, "ℹ️ Hakkında & Ayarlar", "#6366F1", "white", self.ayarlar_ve_hakkinda_penceresi).pack(side=tk.RIGHT, padx=5)
+        self.modern_btn(ws_cercevesi, "ℹ️ Hakkında", "#6366F1", "white", self.ayarlar_ve_hakkinda_penceresi).pack(side=tk.RIGHT, padx=5)
 
         kontrol_cercevesi = tk.Frame(self.pencere, bg=self.card_bg, padx=15, pady=15)
         kontrol_cercevesi.pack(fill=tk.X, padx=20, pady=(15, 10))
@@ -335,6 +334,7 @@ class KelimeUygulamasi:
 
         self.scrollable_frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
         self.canvas_window = self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+        
         def configure_canvas(event):
             self.canvas.itemconfig(self.canvas_window, width=event.width)
         self.canvas.bind('<Configure>', configure_canvas)
@@ -342,6 +342,10 @@ class KelimeUygulamasi:
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # 🔧 EKLENEN KISIM: Fare Tekerleği Olaylarını Dinleme (Hover Event Binding)
+        self.canvas.bind('<Enter>', self._fare_tekerlegi_bagla)
+        self.canvas.bind('<Leave>', self._fare_tekerlegi_coz)
 
         self.sayfalama_cercevesi = tk.Frame(self.pencere, bg=self.bg_color)
         self.sayfalama_cercevesi.pack(fill=tk.X, padx=20, pady=(0, 10))
@@ -354,6 +358,26 @@ class KelimeUygulamasi:
         
         self.sonraki_sayfa_btn = self.modern_btn(self.sayfalama_cercevesi, "Sonraki ▶", "#9CA3AF", "white", self.sonraki_sayfa)
         self.sonraki_sayfa_btn.pack(side=tk.LEFT)
+
+    # 🔧 EKLENEN KISIM: Tekerlek Kaydırma Metotları (Windows, Linux, macOS uyumlu)
+    def _mouse_tekerlegi_kaydir(self, event):
+        """İşletim sistemine göre fare tekerleği sinyalini işler."""
+        if event.num == 4 or event.delta > 0: # Yukarı (Linux/Windows/macOS)
+            self.canvas.yview_scroll(-1, "units")
+        elif event.num == 5 or event.delta < 0: # Aşağı (Linux/Windows/macOS)
+            self.canvas.yview_scroll(1, "units")
+
+    def _fare_tekerlegi_bagla(self, event):
+        """Fare tuvali üzerine geldiğinde tekerlek eventlerini bağlar."""
+        self.canvas.bind_all("<MouseWheel>", self._mouse_tekerlegi_kaydir)
+        self.canvas.bind_all("<Button-4>", self._mouse_tekerlegi_kaydir) # Linux için
+        self.canvas.bind_all("<Button-5>", self._mouse_tekerlegi_kaydir) # Linux için
+
+    def _fare_tekerlegi_coz(self, event):
+        """Fare tuvalden ayrıldığında tekerlek eventlerini çözer (diğer widget'ları bozmamak için)."""
+        self.canvas.unbind_all("<MouseWheel>")
+        self.canvas.unbind_all("<Button-4>")
+        self.canvas.unbind_all("<Button-5>")
 
     def workspaceleri_guncelle(self):
         alanlar = calisma_alanlarini_getir_sql()
@@ -425,13 +449,13 @@ class KelimeUygulamasi:
         self.pencere.attributes('-topmost', self.her_zaman_ustte)
         
         if hasattr(self, 'ayarlar_pin_btn') and self.ayarlar_pin_btn.winfo_exists():
-            ayarlar_win = self.ayarlar_pin_btn.winfo_toplevel() # Ayarlar penceresinin kendisini bul
+            ayarlar_win = self.ayarlar_pin_btn.winfo_toplevel() 
             if self.her_zaman_ustte:
                 self.ayarlar_pin_btn.config(bg="#FCD34D", text="📌 Sabitlendi", fg="#92400E") 
-                ayarlar_win.attributes('-topmost', True) # 🛡️ Ayarlar menüsünü de anında üste çek
+                ayarlar_win.attributes('-topmost', True) 
             else:
                 self.ayarlar_pin_btn.config(bg=getattr(self, 'btn_neutral_bg', "#E5E7EB"), text="📌 Sabitle", fg=getattr(self, 'btn_neutral_fg', "#374151"))
-                ayarlar_win.attributes('-topmost', False) # Üstten çıkar
+                ayarlar_win.attributes('-topmost', False) 
 
     def ayarlar_ve_hakkinda_penceresi(self):
         win = tk.Toplevel(self.pencere)
@@ -451,18 +475,15 @@ class KelimeUygulamasi:
         info_frame = tk.Frame(icerik, bg=self.card_bg)
         info_frame.pack(fill=tk.X, pady=(0, 5))
         
-        # 📌 YENİLİK: Versiyon Kontrol Etiketi (Değişebilir Tasarım)
         versiyon_lbl = tk.Label(info_frame, text="Versiyon 1.0 (Kontrol ediliyor...)", font=self.font_main, bg=self.card_bg, fg=self.text_fg)
         versiyon_lbl.pack()
         
-        # 🛡️ YENİLİK: Uygulamayı dondurmamak için arkaplanda (Thread) kontrol başlatıyoruz
         threading.Thread(target=self.versiyon_kontrol, args=(versiyon_lbl,), daemon=True).start()
 
         tk.Label(info_frame, text="Geliştirici: furkanyasarr0", font=self.font_main, bg=self.card_bg, fg="#3B82F6").pack()
         repo_lbl = tk.Label(info_frame, text="Repo: github.com/furkanyasarr0/wordy", font=self.font_main, bg=self.card_bg, fg="#10B981", cursor="hand2")
         repo_lbl.pack()
         
-        # 🌐 YENİLİK: Linke tıklayınca kopyalamak yerine tarayıcıda doğrudan aç
         repo_lbl.bind("<Button-1>", lambda e: webbrowser.open("https://github.com/furkanyasarr0/wordy"))
 
         tk.Frame(icerik, bg=self.header_bg, height=2).pack(fill=tk.X, pady=10) # Ayırıcı Çizgi
@@ -503,7 +524,6 @@ class KelimeUygulamasi:
     def versiyon_kontrol(self, label_widget):
         """Kendi GitHub deponuzdan güncel versiyon numarasını okur."""
         try:
-            # 🚀 ÖNEMLİ: Kendi reponuzda 'version.txt' dosyası oluşturup içine '1.0' yazın.
             url = "https://raw.githubusercontent.com/furkanyasarr0/Wordy/main/version.txt"
             req = urllib.request.Request(url, headers={'Cache-Control': 'no-cache'})
             with urllib.request.urlopen(req, timeout=3) as response:
@@ -511,13 +531,11 @@ class KelimeUygulamasi:
                 
             mevcut_versiyon = "1.0"
             
-            # Eğer reponuzdaki txt dosyasındaki versiyon, uygulamadakinden farklıysa uyar
             if guncel_versiyon and guncel_versiyon != mevcut_versiyon:
-                label_widget.config(text=f"Versiyon {mevcut_versiyon} (Yeni Sürüm Var: {guncel_versiyon})", fg="#F59E0B") # Turuncu
+                label_widget.config(text=f"Versiyon {mevcut_versiyon} (Yeni Sürüm Var: {guncel_versiyon})", fg="#F59E0B") 
             else:
-                label_widget.config(text=f"Versiyon {mevcut_versiyon} (Güncel)", fg="#10B981") # Yeşil
+                label_widget.config(text=f"Versiyon {mevcut_versiyon} (Güncel)", fg="#10B981") 
         except Exception:
-            # İnternet yoksa veya txt dosyası henüz repoda oluşturulmadıysa sessizce 1.0 yaz
             label_widget.config(text="Versiyon 1.0", fg=self.text_fg)
 
     def otomatik_yedek_al(self):
@@ -610,7 +628,6 @@ class KelimeUygulamasi:
                 messagebox.showwarning("Eksik Bilgi", "Lütfen hem kelimeyi hem de kategoriyi doldurun!", parent=ekle_pencere)
                 return
             
-            # 🛡️ ÖZELLİK 2: Çift Kayıt Kontrolü Sistemi
             if kelime_var_mi_sql(yeni_kelime, self.aktif_workspace):
                 messagebox.showwarning("Kayıtlı", f"'{yeni_kelime}' bu çalışma alanında zaten ekli!", parent=ekle_pencere)
                 return
@@ -638,7 +655,6 @@ class KelimeUygulamasi:
         self.listeyi_guncelle(self.aktif_filtre_kategori, sayfa_degisimi=True)
 
     def listeyi_guncelle(self, kategori_filtresi=None, sayfa_degisimi=False, arama_sifirlama=True):
-        """arama_sifirlama eklendi ki canlı arama (live search) yaparken yazılan harf silinmesin."""
         for widget in self.scrollable_frame.winfo_children():
             widget.destroy()
             
