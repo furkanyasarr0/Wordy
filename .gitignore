@@ -1,0 +1,35 @@
+Python temel dosyaları
+
+pycache/
+*.py[cod]
+*$py.class
+
+Sanal Ortamlar (Virtual Environments)
+
+venv/
+env/
+.venv/
+
+IDE ve Editör ayarları
+
+.vscode/
+.idea/
+*.swp
+
+İşletim Sistemi kalıntıları
+
+.DS_Store
+Thumbs.db
+
+--- WORDY PROJESİNE ÖZEL DOSYALAR ---
+
+Veritabanı dosyası (Kişisel verilerinizin GitHub'a gitmesini engeller)
+
+wordy.db
+*.db
+
+Kullanıcı tarafından alınan veya otomatik oluşturulan yedek dosyaları
+
+backup_.json
+auto_backup_.json
+*.json
