@@ -15,7 +15,7 @@ Whether you are learning a new language, saving coding snippets, or organizing y
 
 ## Changelog
 
-* 🖱️ **Mouse wheel function added.
+* 🖱️ **Mouse wheel function added.**
 
 ## ✨ Features
 
