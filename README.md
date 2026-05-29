@@ -4,7 +4,7 @@
 
 # 📝 Wordy - Word & Tag Manager
 
-[![Version](https://img.shields.io/badge/Version-1.0-blue.svg)](#) [![Python](https://img.shields.io/badge/Python-3.X-blue.svg)](#) [ ![License](https://img.shields.io/badge/License-Open_Source-green.svg)](#) [![Platform](https://img.shields.io/badge/Platform-windows-blue.svg)](#)[![Stars](https://img.shields.io/github/stars/furkanyasarr0/Wordy?style=social)](https://github.com/furkanyasarr0/Wordy)
+[![Version](https://img.shields.io/badge/Version-1.0-blue.svg)](#) [![Python](https://img.shields.io/badge/Python-3.X-blue.svg)](#) [ ![License](https://img.shields.io/badge/License-Open_Source-green.svg)](#) [![Platform](https://img.shields.io/badge/Platform-windows-blue.svg)](#) [![Stars](https://img.shields.io/github/stars/furkanyasarr0/Wordy?style=social)](https://github.com/furkanyasarr0/Wordy)
 </div>
 
 **Wordy** is a lightweight, modern, and fast desktop application built with Python and Tkinter. It is designed to help you easily save, categorize, and manage words, phrases, or snippets across completely isolated workspaces. 
