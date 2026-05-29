@@ -529,7 +529,7 @@ class KelimeUygulamasi:
             with urllib.request.urlopen(req, timeout=3) as response:
                 guncel_versiyon = response.read().decode('utf-8').strip()
                 
-            mevcut_versiyon = "1.0"
+            mevcut_versiyon = "1.1"
             
             if guncel_versiyon and guncel_versiyon != mevcut_versiyon:
                 label_widget.config(text=f"Versiyon {mevcut_versiyon} (Yeni Sürüm Var: {guncel_versiyon})", fg="#F59E0B") 

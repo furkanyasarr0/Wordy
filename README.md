@@ -13,6 +13,10 @@ Whether you are learning a new language, saving coding snippets, or organizing y
 
 ---
 
+## Changelog
+
+* 🖱️ **Mouse wheel function added.
+
 ## ✨ Features
 
 * 📂 **Isolated Workspaces:** Create different environments (e.g., "Work", "English Vocab", "Coding") to keep your words neatly separated.
